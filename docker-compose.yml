@@ -1,0 +1,27 @@
+services:
+  proposal-share:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: proposal-share
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - ADMIN_KEY=${ADMIN_KEY:-your-secure-admin-key-here}
+      - PORT=3000
+      - HOST=0.0.0.0
+    volumes:
+      # Persist SQLite database
+      - proposal_data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').request({hostname:'localhost',port:3000,path:'/'},r=>r.statusCode===200?process.exit(0):process.exit(1)).on('error',()=>process.exit(1)).end()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  proposal_data:
+    driver: local
