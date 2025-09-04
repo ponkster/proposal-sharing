@@ -29,7 +29,7 @@ FROM oven/bun:1-alpine AS production
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=3001
 ENV HOST=0.0.0.0
 
 # Create a non-root user
@@ -46,10 +46,10 @@ RUN mkdir -p /app/data && chown sveltekit:bunuser /app/data
 
 USER sveltekit
 
-EXPOSE 3000
+EXPOSE 3001
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
-  CMD bun -e "const http = require('http'); http.request({hostname:'localhost',port:3000,path:'/'},(r)=>r.statusCode===200?process.exit(0):process.exit(1)).on('error',()=>process.exit(1)).end()"
+  CMD bun -e "const http = require('http'); http.request({hostname:'localhost',port:3001,path:'/'},(r)=>r.statusCode===200?process.exit(0):process.exit(1)).on('error',()=>process.exit(1)).end()"
 
 CMD ["bun", "run", "build/index.js"]
