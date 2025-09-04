@@ -22,7 +22,15 @@
   async function loadProposals() {
     try {
       // Get admin key from env (we'll need to pass it)
-      const adminKey = sessionStorage.getItem('admin_key') || 'Eyjafjall@j0k3wl!'; // temporary production fix
+      // Get admin key from sessionStorage or detect environment
+      const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const adminKey = sessionStorage.getItem('admin_key') || (isDev ? 'test123' : 'Eyjafjall@j0k3wl!');
+      
+      // Debug logging
+      console.log('Debug - hostname:', window.location.hostname);
+      console.log('Debug - isDev:', isDev);
+      console.log('Debug - sessionStorage admin_key:', sessionStorage.getItem('admin_key'));
+      console.log('Debug - using adminKey:', adminKey);
       
       const res = await fetch('/api/proposals/list', {
         method: 'POST',
