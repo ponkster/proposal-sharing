@@ -4,8 +4,7 @@ services:
     image: nginx:alpine
     container_name: proposhare-nginx
     ports:
-      - "80:80"
-      - "443:443"  # For future SSL setup
+      - "8080:80"  # Host nginx proxies to this port
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       # Uncomment below when you have SSL certificates
