@@ -1,14 +1,32 @@
 services:
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: proposhare-nginx
+    ports:
+      - "80:80"
+      - "443:443"  # For future SSL setup
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      # Uncomment below when you have SSL certificates
+      # - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - proposal-share
+    restart: unless-stopped
+    networks:
+      - proposhare-network
+
+  # Main application
   proposal-share:
     build: 
       context: .
       dockerfile: Dockerfile
     container_name: proposal-share
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"  # Only expose internally, not to host
     environment:
       - NODE_ENV=production
-      - ADMIN_KEY=${ADMIN_KEY:-your-secure-admin-key-here}
+      - ADMIN_KEY=${ADMIN_KEY:-Eyjafjall@j0k3wl!}
       - PORT=3000
       - HOST=0.0.0.0
     volumes:
@@ -16,12 +34,18 @@ services:
       - proposal_data:/app/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "node", "-e", "require('http').request({hostname:'localhost',port:3000,path:'/'},r=>r.statusCode===200?process.exit(0):process.exit(1)).on('error',()=>process.exit(1)).end()"]
+      test: ["CMD", "bun", "-e", "const http = require('http'); http.request({hostname:'localhost',port:3000,path:'/'},(r)=>r.statusCode===200?process.exit(0):process.exit(1)).on('error',()=>process.exit(1)).end()"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - proposhare-network
 
 volumes:
   proposal_data:
     driver: local
+
+networks:
+  proposhare-network:
+    driver: bridge
