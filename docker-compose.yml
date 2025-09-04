@@ -23,18 +23,18 @@ services:
       dockerfile: Dockerfile
     container_name: proposal-share
     expose:
-      - "3000"  # Only expose internally, not to host
+      - "3001"  # Only expose internally, not to host
     environment:
       - NODE_ENV=production
-      - ADMIN_KEY=${ADMIN_KEY:-Eyjafjall@j0k3wl!}
-      - PORT=3000
+      - ADMIN_KEY=${ADMIN_KEY:-rahasia-jangan-di-bagi}
+      - PORT=3001
       - HOST=0.0.0.0
     volumes:
       # Persist SQLite database
       - proposal_data:/app/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "bun", "-e", "const http = require('http'); http.request({hostname:'localhost',port:3000,path:'/'},(r)=>r.statusCode===200?process.exit(0):process.exit(1)).on('error',()=>process.exit(1)).end()"]
+      test: ["CMD", "bun", "-e", "const http = require('http'); http.request({hostname:'localhost',port:3001,path:'/'},(r)=>r.statusCode===200?process.exit(0):process.exit(1)).on('error',()=>process.exit(1)).end()"]
       interval: 30s
       timeout: 10s
       retries: 3
