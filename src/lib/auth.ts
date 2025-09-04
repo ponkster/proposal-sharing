@@ -24,5 +24,8 @@ isLoggedIn.subscribe((value) => {
 });
 
 export function logout() {
+  if (browser) {
+    sessionStorage.removeItem('admin_key');
+  }
   isLoggedIn.set(false);
 }

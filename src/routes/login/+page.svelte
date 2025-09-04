@@ -33,6 +33,8 @@
       const data = await res.json();
 
       if (res.ok) {
+        // Store the admin key in sessionStorage for API calls
+        sessionStorage.setItem('admin_key', adminKey);
         isLoggedIn.set(true);
         goto('/admin');
       } else {
