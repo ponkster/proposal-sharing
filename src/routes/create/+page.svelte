@@ -62,7 +62,9 @@
     }
 
     loading = true;
-    const adminKey = 'test123'; // We know they're logged in, so use the test key
+    // Use same environment detection as admin page
+    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const adminKey = sessionStorage.getItem('admin_key') || (isDev ? 'test123' : 'PRODUCTION_KEY_PLACEHOLDER');
     
     const res = await fetch("/api/proposals", {
       method: "POST",

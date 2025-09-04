@@ -23,7 +23,8 @@
 
   async function loadProposal() {
     const proposalId = $page.params.id;
-    const adminKey = 'test123';
+    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const adminKey = sessionStorage.getItem('admin_key') || (isDev ? 'test123' : 'PRODUCTION_KEY_PLACEHOLDER');
     
     try {
       const res = await fetch(`/api/proposals/${proposalId}?adminKey=${encodeURIComponent(adminKey)}`);
@@ -84,7 +85,8 @@
     }
 
     loading = true;
-    const adminKey = 'test123';
+    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const adminKey = sessionStorage.getItem('admin_key') || (isDev ? 'test123' : 'PRODUCTION_KEY_PLACEHOLDER');
     const proposalId = $page.params.id;
     
     const res = await fetch(`/api/proposals/${proposalId}`, {

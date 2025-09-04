@@ -24,7 +24,7 @@
       // Get admin key from env (we'll need to pass it)
       // Get admin key from sessionStorage or detect environment
       const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const adminKey = sessionStorage.getItem('admin_key') || (isDev ? 'test123' : 'Eyjafjall@j0k3wl!');
+      const adminKey = sessionStorage.getItem('admin_key') || (isDev ? 'test123' : 'PRODUCTION_KEY_PLACEHOLDER');
       
       // Debug logging
       console.log('Debug - hostname:', window.location.hostname);
@@ -96,7 +96,8 @@
     deletingId = deleteModal.proposalId;
     
     try {
-      const adminKey = 'test123'; // We know they're logged in
+      const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const adminKey = sessionStorage.getItem('admin_key') || (isDev ? 'test123' : 'PRODUCTION_KEY_PLACEHOLDER');
       
       const res = await fetch(`/api/proposals/${deleteModal.proposalId}`, {
         method: 'DELETE',
