@@ -22,7 +22,7 @@
   async function loadProposals() {
     try {
       // Get admin key from env (we'll need to pass it)
-      const adminKey = sessionStorage.getItem('admin_key') || 'test123'; // temporary
+      const adminKey = sessionStorage.getItem('admin_key') || 'Eyjafjall@j0k3wl!'; // temporary production fix
       
       const res = await fetch('/api/proposals/list', {
         method: 'POST',
